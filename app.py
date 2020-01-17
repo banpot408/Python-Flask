@@ -10,9 +10,18 @@ pywintypes.datetime = pywintypes.TimeType
 app = Flask(__name__)
 conn = pyodbc.connect("Driver=ODBC Driver 17 for SQL Server;server=BANPOT-P;database=flask_db;trusted_connection=yes")
 
+
 @app.route('/adduser')
 def add_user():
     return render_template('adduser.html')
+
+@app.route('/selectuser')
+def selectuser():
+    return render_template('search.html')
+
+
+
+
 
 @app.route('/')
 def show_user():
@@ -24,11 +33,13 @@ def show_user():
         rows = cur.fetchall()
         c = []
         for b in rows:
-            print(b)
             d = (b[0], b[1], b[2], b[3], round(b[4],2), round(b[5],2))
             c.append(d)
-        print(c)
     return render_template('index.html', datas = c)
+
+
+
+
 
 @app.route('/delete/<string:id_data>', methods=['GET'])
 def delete(id_data):
@@ -41,6 +52,10 @@ def delete(id_data):
             conn.commit()
             print('commit ok')
         return redirect(url_for('show_user'))
+
+
+
+
 
 @app.route('/insert', methods=['POST'])
 def insert():
@@ -58,6 +73,30 @@ def insert():
             print('commit ok')
         return redirect(url_for('show_user'))
 
+
+@app.route('/select_user', methods=['POST'])
+def select_user():
+    db_select_user_execuser = '%' + request.form['username'] + '%'
+    db_select_user_fullname = '%' + request.form['fullname'] + '%'
+    db_select_user_gender   = '%' +  request.form['gender'] + '%'
+    db_select_user_weight = request.form['weight']
+    db_select_user_hight = request.form['hight']
+    sql = "select * from Person where username  like ?"
+    print(sql)
+    with conn:
+        cur = conn.cursor()
+        cur.execute(sql, db_select_user_execuser)
+        rows = cur.fetchall()
+        c = []
+        for b in rows:
+            d = (b[0], b[1], b[2], b[3], round(b[4],2), round(b[5],2))
+            c.append(d)
+        print('commit ok select_user()')
+        print(c)
+    return render_template('search_result.html', datas = c)
+
+
+
 @app.route('/update', methods=['POST'])
 def update():
     if request.method == "POST":
@@ -74,17 +113,6 @@ def update():
             conn.commit()
             print('commit ok')
         return redirect(url_for('show_user'))
-
-
-def db_exec():
-    con_string = "Driver=ODBC Driver 17 for SQL Server;server=BANPOT-P;database=flask_db;trusted_connection=yes"
-    sql = '''select * from Person'''
-    with pyodbc.connect(con_string) as con:
-        for row in con.execute(sql):
-            username = row[2]
-            print(username)
-        count_all = con.execute(sql).rowcount
-        print(count_all)
 
 if __name__ == "__main__":
     port = 5000

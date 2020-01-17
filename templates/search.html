@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Banpot Dev / Search User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+          <h2>สืบค้นข้อมูล</h2>
+            <form action="{{ url_for('select_user') }}" method="post">
+             <div class="form-group">
+               <label for="fname">User Name</label>
+               <input type="text" class="form-control"  name="username">
+             </div>
+             <div class="form-group">
+               <label for="fname">Full Name</label>
+               <input type="text" class="form-control"  name="fullname">
+             </div>
+             <div class="form-group">
+               <label for="fname">Gender</label>
+               <input type="text" class="form-control"  name="gender">
+             </div>
+             <div class="form-group">
+               <label for="fname">Weight</label>
+               <input type="text" class="form-control"  name="weight">
+             </div>
+             <div class="form-group">
+               <label for="fname">Hight</label>
+               <input type="text" class="form-control"  name="hight">
+             </div>
+             <a class="btn btn-success" href="/">กลับหน้าแรก</a>
+             <button type="submit" class="pull-right btn btn-primary">ค้นหา</button>
+            </form>
+        </div>
+  </body>
+</html>
